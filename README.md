@@ -19,3 +19,10 @@ https://github.com/joshnewans/serial.git
 https://github.com/flynneva/bno055.git
 
 https://github.com/ldrobotSensorTeam/ldlidar_stl_ros2.git
+
+
+ros2 run tf2_tools view_frames.py
+rqt_graph
+killall gzserver
+ros2 launch slam_toolbox online_async_launch.py params_file:=./src/p0/config/mapper_params_online_async.yaml use_sim_time:=true
+ros2 launch nav2_bringup navigation_launch.py use_sim_time:=true
