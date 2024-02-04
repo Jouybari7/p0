@@ -45,3 +45,9 @@ sudo apt install openssh-server
  git clone http://github.com/buzzology/diffdrive_arduino
  cd src/diffdrive_arduino/
 git switch galactic
+
+for simulation:
+uncomment use_sime_time=true on ekf.yaml and my_controller.yaml. and uncomment     # left_wheel_names:   ['left_wheel_joint','rear_left_wheel_joint']
+    # right_wheel_names: ['right_wheel_joint','rear_right_wheel_joint']
+
+    in my_controllers.yaml file.
