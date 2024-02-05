@@ -27,7 +27,8 @@ https://github.com/packbionics/csi-camera-ros-wrapper.git
 ros2 run tf2_tools view_frames.py
 rqt_graph
 killall gzserver
-ros2 launch slam_toolbox online_async_launch.py params_file:=./src/p0/config/mapper_params_online_async.yaml use_sim_time:=true
+<!-- ros2 launch slam_toolbox online_async_launch.py params_file:=./src/p0/config/mapper_params_online_async.yaml use_sim_time:=true -->
+ros2 launch p0 online_async_launch.py
 ros2 launch nav2_bringup navigation_launch.py use_sim_time:=true
 
 ros2 launch p0 launch_sim.launch.py use_sim_time:=true world:=./src/p0/worlds/obstacles.world
