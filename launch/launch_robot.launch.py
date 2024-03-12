@@ -105,6 +105,19 @@ def generate_launch_description():
         name='ekf_filter_node',
         output='screen',
         parameters=[robot_localization_file_path])
+    rviz_launch_cmd = Node(
+        package='rviz2',
+        executable='rviz2',
+        name='rviz2',
+        output='screen'
+    )
+
+    delayed_rviz_launch = RegisterEventHandler(
+        event_handler=OnProcessStart(
+            target_action=start_robot_localization_cmd,  # You can choose another target action if needed
+            on_start=[rviz_launch_cmd],
+        )
+    )
 
 
     ldlidar_launch = IncludeLaunchDescription(PythonLaunchDescriptionSource([os.path.join(get_package_share_directory('ldlidar_stl_ros2'), 'launch', 'ld19.launch.py')]))
@@ -120,5 +133,6 @@ def generate_launch_description():
         delayed_joint_broad_spawner,
         ldlidar_launch,
         imu_launch,
-        start_robot_localization_cmd
+        start_robot_localization_cmd,
+        delayed_rviz_launch
     ])
