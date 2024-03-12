@@ -50,6 +50,26 @@ def visualize_and_extract_area(map_path, threshold=128):
 
         # Filter out pixels with values less than the specified threshold
         inside_positions = inside_positions[map_img[inside_positions[:, 1], inside_positions[:, 0]] >= threshold]
+
+
+        # Display the image
+        #plt.imshow(map_img, cmap='gray')
+        #plt.title('Map Visualization')
+        #plt.axis('on')  # Turn off axis labels
+
+        # Plot the original selected pixel positions on the map
+        #plt.plot(inside_positions[:, 0], inside_positions[:, 1], 'go', label='Original Positions')
+
+        # Interactive mode for selecting points
+        #plt.ion()
+
+        # Prompt the user to select points and end the process by pressing a button
+        #print("Select points on the map. Press 'Enter' to finish.")
+        #area_corners = plt.ginput(n=-1, timeout=0)
+
+        # Turn off interactive mode
+        #plt.ioff()
+
         #inverrt height
         inside_positions[:, 1] = h - inside_positions[:, 1]
         #invert pixcel to meter
@@ -57,6 +77,10 @@ def visualize_and_extract_area(map_path, threshold=128):
         #relocate to origin
         inside_positions[:, 1]=-origin[1]+inside_positions[:, 1]
         inside_positions[0, :]=-origin[0]+inside_positions[0, :]
+        inside_positions=np.round(inside_positions, 1)
+        inside_positions=np.unique(inside_positions, axis=0)
+        inside_positions=np.unique(inside_positions, axis=1)
+
         # You can use the filtered 'inside_positions' variable to perform further operations
         print("Filtered pixel positions inside the selected area:", inside_positions)
     else:
