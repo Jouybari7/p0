@@ -38,6 +38,8 @@ install(
 )
 install(PROGRAMS
   scripts/nav_through_poses.py
+  scripts/nav_to_pose.py
+  scripts/test.py
   DESTINATION lib/${PROJECT_NAME}
 
   )

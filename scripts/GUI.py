@@ -1,41 +1,43 @@
+#!/usr/bin/env python3
 import tkinter as tk
 import subprocess
 from tkinter import messagebox
+import time
 
 class TerminalGUI:
     def __init__(self, root):
         self.root = root
         self.root.title("Terminal GUI")
-        self.root.geometry("800x600")
+        self.root.geometry("800x800")
         self.root.configure(bg='#001F3F')
 
-        self.processes = {"map": False, "navigate": False}  # Dictionary to store process status (True for running, False for not running)
+        self.processes = {"mapping": False, "navigation": False,"zone": False,"go": False,"deck": False}  # Dictionary to store process status (True for running, False for not running)
 
         self.commands = {
-            "map": ["ros2 launch p0 online_async_launch.py params_file:=/src/p0/config/mapper_params_online_async_mapping.yaml"],
-            "save_map": ["ros2 run nav2_map_server map_saver_cli -f ~/robot_ws/src/p0/map/map"],
-            "delete_map": ["rm ~/robot_ws/src/p0/map/map.*"],
-            "navigate": [
-                "echo 'Command 4.1 executed'",
-                "echo 'Command 4.2 executed'",
-                "echo 'Command 4.3 executed'"
-            ],
-            "rc_mode": ["ros2 launch p0 launch_robot.launch.py"]
+            # "mapping": ["ros2 launch p0 online_async_mapping_launch.py params_file:=/src/p0/config/mapper_params_online_async_mapping.yaml"],
+            "mapping": ["ros2 launch p0 online_async_mapping_launch.py"],
+            "save_map": ["ros2 run nav2_map_server map_saver_cli -f ~/robot_ws/src/p0/map","ros2 service call /slam_toolbox/serialize_map slam_toolbox/srv/SerializePoseGraph 'filename: map'"],
+            "delete_map": ["rm ~/robot_ws/src/p0/map.*"],
+            "navigation": ["ros2 launch p0 online_async_navigation_launch.py use_sim_time:=true","ros2 launch nav2_bringup navigation_launch.py use_sim_time:=true"],
+            "zone": ["python3 path_planner.py"],
+            "go": ["ros2 run p0 nav_through_poses.py"],
+            "deck": ["ros2 run p0 nav_to_pose.py"],
+            # "robot_launch": ["ros2 launch p0 launch_robot.launch.py"
+            "robot_launch": ["ros2 launch p0 launch_sim.launch.py use_sim_time:=true world:=~/robot_ws/src/p0/worlds/obstacles.world"]
         }
-
         # Automatically start the launch_robot.launch.py process
-        self.start_process("rc_mode")
+        self.start_process("robot_launch")
 
-        # Create other buttons excluding rc_mode
+        # Create other buttons excluding robot_launch
         self.create_buttons()
 
     def create_buttons(self):
         for process_key, command in self.commands.items():
-            if process_key != "rc_mode":
+            if process_key != "robot_launch":
                 button = tk.Button(self.root, text=process_key.capitalize(), command=lambda key=process_key: self.execute_command(key), height=5, width=20, bg='#4CAF50')  # Set initial color to green
                 button.pack(pady=10)
 
-                if process_key in ["map", "navigate"]:
+                if process_key in ["mapping", "navigation","zone","go","deck"]:
                     # Toggle buttons will change color when pressed
                     button.config(command=lambda key=process_key, b=button: self.toggle_button_color(b, key))
 
@@ -48,7 +50,7 @@ class TerminalGUI:
         self.toggle_process(process_key)
 
     def execute_command(self, process_key):
-        if process_key not in ["map", "navigate"]:
+        if process_key not in ["mapping", "navigation","zone","go","deck"]:
             self.start_process(process_key)
 
     def toggle_process(self, process_key):
@@ -65,6 +67,7 @@ class TerminalGUI:
             # Execute the new commands
             for command in self.commands[process_key]:
                 subprocess.Popen(["x-terminal-emulator", "-e", command])
+                time.sleep(8)  # Introduce a 5-second delay
 
             # Update process status to running
             self.processes[process_key] = True
