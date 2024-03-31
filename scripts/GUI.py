@@ -8,22 +8,23 @@ class TerminalGUI:
     def __init__(self, root):
         self.root = root
         self.root.title("Terminal GUI")
-        self.root.geometry("800x800")
+        self.root.geometry("1000x600")
         self.root.configure(bg='#001F3F')
 
         self.processes = {"mapping": False, "navigation": False,"zone": False,"go": False,"deck": False}  # Dictionary to store process status (True for running, False for not running)
 
         self.commands = {
-            # "mapping": ["ros2 launch p0 online_async_mapping_launch.py params_file:=/src/p0/config/mapper_params_online_async_mapping.yaml"],
-            "mapping": ["ros2 launch p0 online_async_mapping_launch.py"],
-            "save_map": ["ros2 run nav2_map_server map_saver_cli -f ~/robot_ws/src/p0/map","ros2 service call /slam_toolbox/serialize_map slam_toolbox/srv/SerializePoseGraph 'filename: map'"],
-            "delete_map": ["rm ~/robot_ws/src/p0/map.*"],
+            "mapping": ["ros2 launch p0 online_async_mapping_launch.py params_file:=/src/p0/config/mapper_params_online_async_mapping.yaml"],
+            # "mapping": ["ros2 launch p0 online_async_mapping_launch.py"],
+            "save_map": ["ros2 run nav2_map_server map_saver_cli -f ~/robot_ws/src/p0/scripts/map","ros2 service call /slam_toolbox/serialize_map slam_toolbox/srv/SerializePoseGraph 'filename: map'"],
+            "delete_map": ["rm ~/robot_ws/src/p0/scripts/map.*"],
             "navigation": ["ros2 launch p0 online_async_navigation_launch.py use_sim_time:=true","ros2 launch nav2_bringup navigation_launch.py use_sim_time:=true"],
+            # "navigation": ["ros2 launch p0 online_async_navigation_launch.py","ros2 launch p0 navigation_launch.py"],#robot
             "zone": ["python3 path_planner.py"],
             "go": ["ros2 run p0 nav_through_poses.py"],
             "deck": ["ros2 run p0 nav_to_pose.py"],
-            # "robot_launch": ["ros2 launch p0 launch_robot.launch.py"
-            "robot_launch": ["ros2 launch p0 launch_sim.launch.py use_sim_time:=true world:=~/robot_ws/src/p0/worlds/obstacles.world"]
+            # "robot_launch": ["ros2 launch p0 launch_robot.launch.py"]#robot
+            "robot_launch": ["ros2 launch p0 launch_sim.launch.py use_sim_time:=true world:=~/robot_ws/src/p0/worlds/obstacles4.world"]
         }
         # Automatically start the launch_robot.launch.py process
         self.start_process("robot_launch")
@@ -32,12 +33,24 @@ class TerminalGUI:
         self.create_buttons()
 
     def create_buttons(self):
-        for process_key, command in self.commands.items():
-            if process_key != "robot_launch":
-                button = tk.Button(self.root, text=process_key.capitalize(), command=lambda key=process_key: self.execute_command(key), height=5, width=20, bg='#4CAF50')  # Set initial color to green
-                button.pack(pady=10)
+        # Define coordinates for each button
+        button_positions = {
+            "mapping": (100, 100),
+            "navigation": (400, 100),
+            "zone": (700, 100),
+            "go": (700, 250),
+            "deck": (400, 250),
+            "save_map": (100, 250),  # Position for save_map button
+            "delete_map": (100, 400),  # Position for delete_map button
+        }
 
-                if process_key in ["mapping", "navigation","zone","go","deck"]:
+        for process_key, command in self.commands.items():
+            if process_key in button_positions:
+                x, y = button_positions[process_key]
+                button = tk.Button(self.root, text=process_key.capitalize(), command=lambda key=process_key: self.execute_command(key), height=5, width=20, bg='#4CAF50')  # Set initial color to green
+                button.place(x=x, y=y)
+
+                if process_key in ["mapping", "navigation", "zone", "go", "deck"]:
                     # Toggle buttons will change color when pressed
                     button.config(command=lambda key=process_key, b=button: self.toggle_button_color(b, key))
 
@@ -67,7 +80,7 @@ class TerminalGUI:
             # Execute the new commands
             for command in self.commands[process_key]:
                 subprocess.Popen(["x-terminal-emulator", "-e", command])
-                time.sleep(8)  # Introduce a 5-second delay
+                time.sleep(6)  # Introduce a 5-second delay
 
             # Update process status to running
             self.processes[process_key] = True
