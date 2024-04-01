@@ -56,3 +56,9 @@ uncomment use_sime_time=true on ekf.yaml and my_controller.yaml. and uncomment  
     # right_wheel_names: ['right_wheel_joint','rear_right_wheel_joint']
 
     in my_controllers.yaml file.
+
+
+    Terminal [ctl+alt+t] sudo apt-get remove onboard
+Then sudo apt autoremove
+
+https://developer.nvidia.com/embedded/learn/tutorials/vnc-setup
