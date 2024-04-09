@@ -12,25 +12,25 @@ void initMotorController()
   R->SetOutputPwmFrequencyKhz(20);
   R->SetCurrentLimit(10.0);
   R->SetMotorPolesCounts(4);
-  R->SetCommandMode(SOLOMotorControllers::CommandMode::digital);
-  R->SetMotorType(SOLOMotorControllers::MotorType::bldcPmsm);
-  R->SetFeedbackControlMode(SOLOMotorControllers::FeedbackControlMode::hallSensors);
+  R->SetCommandMode(SOLOMotorControllers::CommandMode::DIGITAL);
+  R->SetMotorType(SOLOMotorControllers::MotorType::BLDC_PMSM);
+  R->SetFeedbackControlMode(SOLOMotorControllers::FeedbackControlMode::HALL_SENSORS);
   R->SetSpeedControllerKp(0.1199951);
   R->SetSpeedControllerKi(0.0049972);
-  R->SetControlMode(SOLOMotorControllers::ControlMode::speedMode);
+  R->SetControlMode(SOLOMotorControllers::ControlMode::SPEED_MODE);
   
   L->SetOutputPwmFrequencyKhz(20);
   L->SetCurrentLimit(10.0);
   L->SetMotorPolesCounts(4);
-  L->SetCommandMode(SOLOMotorControllers::CommandMode::digital);
-  L->SetMotorType(SOLOMotorControllers::MotorType::bldcPmsm);
-  L->SetFeedbackControlMode(SOLOMotorControllers::FeedbackControlMode::hallSensors);
+  L->SetCommandMode(SOLOMotorControllers::CommandMode::DIGITAL);
+  L->SetMotorType(SOLOMotorControllers::MotorType::BLDC_PMSM);
+  L->SetFeedbackControlMode(SOLOMotorControllers::FeedbackControlMode::HALL_SENSORS);
   L->SetSpeedControllerKp(0.1199951);
   L->SetSpeedControllerKi(0.0049972);
-  L->SetControlMode(SOLOMotorControllers::ControlMode::speedMode);
-  R->MotorParametersIdentification(SOLOMotorControllers::Action::start);
+  L->SetControlMode(SOLOMotorControllers::ControlMode::SPEED_MODE);
+  R->MotorParametersIdentification(SOLOMotorControllers::Action::START);
   delay(2000);
-  L->MotorParametersIdentification(SOLOMotorControllers::Action::start);
+  L->MotorParametersIdentification(SOLOMotorControllers::Action::START);
   delay(2000);
   }
 
@@ -54,12 +54,12 @@ void initMotorController()
     spd2=map(spd,0, 255, 300, 3000);}
     
     if (i == LEFT) { 
-      if      (reverse == 0) { L->SetMotorDirection(SOLOMotorControllers::Direction::counterclockwise);L->SetSpeedReference(spd2);}
-      else if (reverse == 1) { L->SetMotorDirection(SOLOMotorControllers::Direction::clockwise);L->SetSpeedReference(spd2);}
+      if      (reverse == 0) { L->SetMotorDirection(SOLOMotorControllers::Direction::COUNTERCLOCKWISE);L->SetSpeedReference(spd2);}
+      else if (reverse == 1) { L->SetMotorDirection(SOLOMotorControllers::Direction::CLOCKWISE);L->SetSpeedReference(spd2);}
     }
     else /*if (i == RIGHT) //no need for condition*/ {
-      if      (reverse == 0) {R->SetMotorDirection(SOLOMotorControllers::Direction::clockwise);R->SetSpeedReference(spd2);}
-      else if (reverse == 1) {R->SetMotorDirection(SOLOMotorControllers::Direction::counterclockwise);R->SetSpeedReference(spd2);}
+      if      (reverse == 0) {R->SetMotorDirection(SOLOMotorControllers::Direction::CLOCKWISE);R->SetSpeedReference(spd2);}
+      else if (reverse == 1) {R->SetMotorDirection(SOLOMotorControllers::Direction::COUNTERCLOCKWISE);R->SetSpeedReference(spd2);}
     }
   }
 

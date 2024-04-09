@@ -5,9 +5,10 @@
 #define BAUDRATE     57600
 #define MAX_PWM        255
 
-SOLOMotorControllers *R; 
-SOLOMotorControllers *L;
-
+SOLOMotorControllersCanopen *R; 
+SOLOMotorControllersCanopen *L;
+long int init_l=0;
+long int init_r=0;
 /* Variable initialization */
 
 // A pair of varibles to help parse serial commands (thanks Fergs)
@@ -55,14 +56,16 @@ int runCommand() {
     break;
     
   case READ_ENCODERS:
-    Serial.print(L->GetPositionCountsFeedback());
+    Serial.print(L->GetPositionCountsFeedback()-init_l);
     Serial.print(" ");
-    Serial.println(-R->GetPositionCountsFeedback());
+    Serial.println(-R->GetPositionCountsFeedback()+init_r);
     break;
     
   case RESET_ENCODERS:
-    L->ResetPositionToZero();
-    R->ResetPositionToZero();
+//    L->ResetPosition/ToZero();
+///    R->ResetPositionToZero();
+  init_l=L->GetPositionCountsFeedback();
+  init_r=R->GetPositionCountsFeedback();
     Serial.println("OK"); 
     break;
     
@@ -79,6 +82,9 @@ void setup() {
   
   Serial.begin(BAUDRATE);
   initMotorController();
+  init_l=L->GetPositionCountsFeedback();
+  init_r=R->GetPositionCountsFeedback();
+
   
 }
 
