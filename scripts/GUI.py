@@ -15,15 +15,15 @@ class TerminalGUI:
 
         self.commands = {
             # "mapping": ["ros2 launch p0 online_async_mapping_launch.py params_file:=/src/p0/config/mapper_params_online_async_mapping.yaml"],
-            "mapping": ["ros2 launch p0 online_async_mapping_launch.py"],
+            "mapping": ["ros2 launch p0 online_async_mapping_launch.py use_sim_time:=false"],
             "save_map": ["ros2 run nav2_map_server map_saver_cli -f ~/robot_ws/src/p0/scripts/map","ros2 service call /slam_toolbox/serialize_map slam_toolbox/srv/SerializePoseGraph 'filename: map'"],
             "delete_map": ["rm ~/robot_ws/src/p0/scripts/map.*"],
             # "navigation": ["ros2 launch p0 online_async_navigation_launch.py use_sim_time:=true","ros2 launch nav2_bringup navigation_launch.py use_sim_time:=true"],
-            "navigation": ["ros2 launch p0 online_async_navigation_launch.py","ros2 launch p0 navigation_launch.py"],#robot
+            "navigation": ["ros2 launch p0 online_async_navigation_launch.py use_sim_time:=false","ros2 launch p0 navigation_launch.py use_sim_time:=false"],#robot
             "zone": ["python3 path_planner.py"],
             "go": ["ros2 run p0 nav_through_poses.py"],
             "deck": ["ros2 run p0 nav_to_pose.py"],
-            "robot_launch": ["ros2 launch p0 launch_robot.launch.py"]#robot
+            "robot_launch": ["ros2 launch p0 launch_robot.launch.py use_sim_time:=false"]#robot
             # "robot_launch": ["ros2 launch p0 launch_sim.launch.py use_sim_time:=true world:=~/robot_ws/src/p0/worlds/obstacles4.world"]
         }
         # Automatically start the launch_robot.launch.py process

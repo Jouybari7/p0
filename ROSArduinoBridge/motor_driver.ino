@@ -54,12 +54,12 @@ void initMotorController()
     spd2=map(spd,0, 255, 300, 3000);}
     
     if (i == LEFT) { 
-      if      (reverse == 0) { L->SetMotorDirection(SOLOMotorControllers::Direction::COUNTERCLOCKWISE);L->SetSpeedReference(spd2);}
-      else if (reverse == 1) { L->SetMotorDirection(SOLOMotorControllers::Direction::CLOCKWISE);L->SetSpeedReference(spd2);}
+      if      (reverse == 1) { L->SetMotorDirection(SOLOMotorControllers::Direction::COUNTERCLOCKWISE);L->SetSpeedReference(spd2);}
+      else if (reverse == 0) { L->SetMotorDirection(SOLOMotorControllers::Direction::CLOCKWISE);L->SetSpeedReference(spd2);}
     }
     else /*if (i == RIGHT) //no need for condition*/ {
-      if      (reverse == 0) {R->SetMotorDirection(SOLOMotorControllers::Direction::CLOCKWISE);R->SetSpeedReference(spd2);}
-      else if (reverse == 1) {R->SetMotorDirection(SOLOMotorControllers::Direction::COUNTERCLOCKWISE);R->SetSpeedReference(spd2);}
+      if      (reverse == 1) {R->SetMotorDirection(SOLOMotorControllers::Direction::CLOCKWISE);R->SetSpeedReference(spd2);}
+      else if (reverse == 0) {R->SetMotorDirection(SOLOMotorControllers::Direction::COUNTERCLOCKWISE);R->SetSpeedReference(spd2);}
     }
   }
 
